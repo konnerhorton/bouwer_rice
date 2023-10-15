@@ -1,4 +1,5 @@
 import streamlit as st
+from utilities import bouwer_rice_1989
 
 st.title("Bouwer Rice Hydraulic Conductivity")
 
@@ -31,5 +32,7 @@ st.latex(
 )
 
 st.markdown(
-    r"The $A$, $B$, and $C$ terms are dimensionless and can be determined using the ratio $L_e/r_w$ and the plot published in Bouwers (1989)."
+    r"The $A$, $B$, and $C$ terms are dimensionless and can be determined using the ratio $L_e/r_w$ and the plot published in Bouwers (1989). The published chart is reproduced below."
 )
+
+st.plotly_chart(bouwer_rice_1989.ln_Re_rw_coeff_plot())

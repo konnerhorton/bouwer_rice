@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import plotly.io as pio
+from plotly.subplots import make_subplots
 
 pio.templates["simple_white"]["layout"]["xaxis"]["mirror"] = True
 pio.templates["simple_white"]["layout"]["yaxis"]["mirror"] = True
@@ -282,10 +283,40 @@ def plot_results(
     return fig
 
 
-def ln_Re_rw_coeff(kind: str, L_e: float, r_w: float) -> float:
+def ln_Re_rw_coeff_plot():
     from utilities.ln_Re_rw_coeff_curves import ln_Re_rw_coeff_curves
 
-    x = ln_Re_rw_coeff_curves[kind]["x"]
-    y = ln_Re_rw_coeff_curves[kind]["y"]
-    coeff = np.round_(np.interp(L_e / r_w, x, y), 2)
-    return coeff
+    ln_Re_rw_coeff_curves.keys()
+
+    dfs = []
+    for curve, data in ln_Re_rw_coeff_curves.items():
+        dfx = pd.DataFrame(data)
+        dfx["curve"] = curve
+        dfs.append(dfx)
+
+    df = pd.concat(dfs)
+    df
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    for c in ["A", "C"]:
+        dfx = df[df["curve"] == c]
+        fig.add_trace(go.Scatter(x=dfx["x"], y=dfx["y"], name=c), secondary_y=False)
+
+    dfx = df[df["curve"] == "B"]
+    fig.add_trace(go.Scatter(x=dfx["x"], y=dfx["y"], name="B"), secondary_y=True)
+
+    fig.update_layout(
+        xaxis=dict(title=r"L_e/r_w", type="log", minor=dict(showgrid=True)),
+        yaxis1=dict(
+            title=dict(text="A and C"),
+            range=[0, 14],
+        ),
+        yaxis2=dict(
+            title=dict(text="B"),
+            range=[0, 7],
+            tickmode="sync",
+        ),
+        legend=dict(x=0.01, y=0.99),
+        margin=dict(t=10, b=10, l=10, r=10),
+    )
+    return fig
