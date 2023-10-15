@@ -280,3 +280,12 @@ def plot_results(
         go.Scatter(x=trend_x, y=trend_y, line=dict(color="gray", width=2))
     ).update_layout(showlegend=False)
     return fig
+
+
+def ln_Re_rw_coeff(kind: str, L_e: float, r_w: float) -> float:
+    from utilities.ln_Re_rw_coeff_curves import ln_Re_rw_coeff_curves
+
+    x = ln_Re_rw_coeff_curves[kind]["x"]
+    y = ln_Re_rw_coeff_curves[kind]["y"]
+    coeff = np.round_(np.interp(L_e / r_w, x, y), 2)
+    return coeff

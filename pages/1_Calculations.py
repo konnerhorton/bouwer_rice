@@ -20,22 +20,30 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     test_name = st.text_input("Test Name", value="BH-01")
-    st.write("Units of uploaded data")
     unit_time = st.selectbox("Time (`time` column)", ["seconds"])
     unit_length = st.selectbox("Length (`displacement` column)", ["feet", "meters"])
 with col2:
     casing_radius = st.number_input("Well Radius, $r_c$", value=2 / 12)
     well_screen_length = st.number_input("Well Screen Length, $L_e$", value=30)
     well_radius = st.number_input("Well Radius $r_w$", value=4.75 / 12)
+
+with col3:
     water_table_height_above_aquiclude = st.number_input(
         "Water column height (above top of aquiclude), $H$", value=150
     )
-with col3:
     water_column_height = st.number_input(
         "Water column height (above bottom of well screen), $L_w$", value=50
     )
-    coefficient_A = st.number_input(r"$\ln{\frac{R_e}{r_w}}$ number $A$", value=3.25)
-    coefficient_B = st.number_input(r"$\ln{\frac{R_e}{r_w}}$ number $B$", value=0.5)
+
+coefficient_A = bouwer_rice_1989.ln_Re_rw_coeff(
+    kind="A", L_e=well_screen_length, r_w=well_radius
+)
+coefficient_B = bouwer_rice_1989.ln_Re_rw_coeff(
+    kind="B", L_e=well_screen_length, r_w=well_radius
+)
+coefficient_C = bouwer_rice_1989.ln_Re_rw_coeff(
+    kind="C", L_e=well_screen_length, r_w=well_radius
+)
 
 st.markdown(
     r"""If all relevant data has been provided, a chart will be displayed below. Use the selectors above the chart to decide what portion of the plot to used for the slope $\frac{\ln{\frac{y_0}{y_t}}}{t}$"""
