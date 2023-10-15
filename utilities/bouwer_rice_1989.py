@@ -283,6 +283,15 @@ def plot_results(
     return fig
 
 
+def ln_Re_rw_coeff(kind, L_e, r_w):
+    from utilities.ln_Re_rw_coeff_curves import ln_Re_rw_coeff_curves
+
+    x = ln_Re_rw_coeff_curves[kind]["x"]
+    y = ln_Re_rw_coeff_curves[kind]["y"]
+    coeff = np.interp(L_e / r_w, x, y)
+    return coeff
+
+
 def ln_Re_rw_coeff_plot():
     from utilities.ln_Re_rw_coeff_curves import ln_Re_rw_coeff_curves
 
