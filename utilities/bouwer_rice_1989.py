@@ -10,6 +10,7 @@ pio.templates["simple_white"]["layout"]["xaxis"]["mirror"] = True
 pio.templates["simple_white"]["layout"]["yaxis"]["mirror"] = True
 pio.templates["simple_white"]["layout"]["xaxis"]["showgrid"] = True
 pio.templates["simple_white"]["layout"]["yaxis"]["showgrid"] = True
+pio.templates["simple_white"]["layout"]["font"]["family"] = "Segoe UI"
 pio.templates.default = "simple_white"
 
 
@@ -242,11 +243,14 @@ def plot_results(
     )
     fig.update_layout(
         height=500,
-        width=800,
+        width=600,
+        margin=dict(t=40, b=20, l=20, r=20),
+        title=f"Bouwer-Rice Results for {name}",
         xaxis=dict(
             title=dict(
                 text="Time, s",
             ),
+            exponentformat="E",
             range=[elapsed_time.min(), elapsed_time.max()],
         ),
         yaxis=dict(
@@ -261,9 +265,8 @@ def plot_results(
             ],
         ),
     )
-    annotation_text = (
-        annotation_text
-    ) = f"""Test Well: {name}<br>Static Water Level: {static_water_level} {units_length}<br>Solution Type: Bouwer Rice<br>Hydraulic Conductivity: {k:.0E} {unit_abbreviations[units_length]}/{unit_abbreviations[units_time]}"""
+    # Static Water Level: {static_water_level}
+    annotation_text = f"""Test Well: {name}<br>Solution Type: Bouwer Rice<br>Hydraulic Conductivity: {k:.0E} {unit_abbreviations[units_length]}/{unit_abbreviations[units_time]}"""
     fig.add_annotation(
         text=annotation_text,
         showarrow=False,
